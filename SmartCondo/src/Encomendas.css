@@ -1,0 +1,123 @@
+.encomendas {
+    width: 100%;
+}
+
+.encomendas-titulo {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--cor-preto);
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--cor-verde-claro);
+}
+
+.encomendas-lista {
+    display: grid;
+    gap: 15px;
+}
+
+.encomenda-card {
+    background: var(--cor-branco);
+    border: 2px solid var(--cor-verde-claro);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s;
+}
+
+.encomenda-card:hover {
+    box-shadow: 0 6px 20px rgba(91, 169, 137, 0.15);
+    border-color: var(--cor-verde-principal);
+    transform: translateY(-2px);
+}
+
+.encomenda-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.encomenda-info {
+    flex: 1;
+}
+
+.encomenda-numero {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cor-preto);
+    margin-bottom: 5px;
+}
+
+.encomenda-data {
+    font-size: 12px;
+    color: var(--cor-verde-principal);
+    margin: 0;
+}
+
+.encomenda-status {
+    padding: 6px 16px;
+    border-radius: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.encomenda-detalhes {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: rgba(91, 169, 137, 0.05);
+    border-radius: 10px;
+}
+
+.encomenda-detalhes p {
+    font-size: 13px;
+    color: var(--cor-preto);
+    margin: 5px 0;
+}
+
+.encomenda-detalhes strong {
+    color: var(--cor-verde-principal);
+    font-weight: 700;
+}
+
+.encomenda-botao {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--cor-verde-principal) 0%, var(--cor-verde-escuro) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.encomenda-botao:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(91, 169, 137, 0.3);
+}
+
+.encomenda-botao:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .encomendas-titulo {
+        font-size: 22px;
+    }
+
+    .encomenda-header {
+        flex-direction: column;
+    }
+
+    .encomenda-status {
+        width: 100%;
+        text-align: center;
+    }
+}
