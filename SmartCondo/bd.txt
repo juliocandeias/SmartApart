@@ -1,0 +1,141 @@
+-- Criação das tabelas de pessoas
+CREATE TABLE Inquilino (
+    Id_Inquilino SERIAL PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CPF VARCHAR(14) UNIQUE NOT NULL,
+    Data_Nascimento DATE NOT NULL,
+    Proprietario_bool BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE Dono (
+    Id_Dono SERIAL PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CPF VARCHAR(14) UNIQUE NOT NULL,
+    Data_Nascimento DATE NOT NULL,
+    Senha VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Funcionario (
+    Id_Funcionario SERIAL PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CPF VARCHAR(14) UNIQUE NOT NULL,
+    Data_Nascimento DATE NOT NULL,
+    Funcao VARCHAR(50) NOT NULL,
+    Senha VARCHAR(255) NOT NULL
+);
+
+-- Tabelas de relacionamento e específicas
+CREATE TABLE Sindico (
+    Id_Sindico SERIAL PRIMARY KEY,
+    Id_Inquilino INT NOT NULL,
+    Data_Posse DATE NOT NULL,
+    Data_Final_Posse DATE,
+    Status VARCHAR(20) DEFAULT 'Ativo',
+    FOREIGN KEY (Id_Inquilino) REFERENCES Inquilino(Id_Inquilino)
+);
+
+CREATE TABLE Visitante (
+    Id_Visitante SERIAL PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CPF VARCHAR(14),
+    Id_Inquilino INT,  -- * pode ser NULL
+    Id_Dono INT,       -- * pode ser NULL
+    Prestador_bool BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (Id_Inquilino) REFERENCES Inquilino(Id_Inquilino),
+    FOREIGN KEY (Id_Dono) REFERENCES Dono(Id_Dono)
+);
+
+-- Tabelas de chamados e tarefas
+CREATE TABLE Chamado (
+    Id_Chamado SERIAL PRIMARY KEY,
+    Assunto VARCHAR(200) NOT NULL,
+    Descricao TEXT,
+    Status VARCHAR(20) DEFAULT 'Aberto',
+    Data_Abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Tarefa (
+    Id_Tarefa SERIAL PRIMARY KEY,
+    Id_Funcionario INT NOT NULL,
+    Id_Chamado INT NOT NULL,
+    Status VARCHAR(20) DEFAULT 'Pendente',
+    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (Id_Funcionario) REFERENCES Funcionario(Id_Funcionario),
+    FOREIGN KEY (Id_Chamado) REFERENCES Chamado(Id_Chamado)
+);
+
+-- Tabelas de estrutura física
+CREATE TABLE Bloco (
+    Id_Bloco SERIAL PRIMARY KEY,
+    Nome VARCHAR(10) NOT NULL UNIQUE
+);
+
+CREATE TABLE Apartamento (
+    Id_Apartamento SERIAL PRIMARY KEY,
+    Id_Bloco INT NOT NULL,
+    Id_Inquilino INT,     -- * pode ser NULL
+    Id_Dono INT NOT NULL,
+    Numero INT NOT NULL,
+    FOREIGN KEY (Id_Bloco) REFERENCES Bloco(Id_Bloco),
+    FOREIGN KEY (Id_Inquilino) REFERENCES Inquilino(Id_Inquilino),
+    FOREIGN KEY (Id_Dono) REFERENCES Dono(Id_Dono),
+    UNIQUE(Id_Bloco, Numero)
+);
+
+CREATE TABLE Salao (
+    Id_Salao SERIAL PRIMARY KEY,
+    Nome VARCHAR(50) NOT NULL,
+    Status VARCHAR(20) DEFAULT 'Disponivel'
+);
+
+-- Tabelas de reservas e encomendas
+CREATE TABLE Reserva (
+    Id_Reserva SERIAL PRIMARY KEY,
+    Id_Inquilino INT NOT NULL,
+    Id_Salao INT NOT NULL,
+    Data_Prevista DATE NOT NULL,
+    Status VARCHAR(20) DEFAULT 'Solicitado',
+    FOREIGN KEY (Id_Inquilino) REFERENCES Inquilino(Id_Inquilino),
+    FOREIGN KEY (Id_Salao) REFERENCES Salao(Id_Salao)
+);
+
+CREATE TABLE Encomenda (
+    Id_Encomenda SERIAL PRIMARY KEY,
+    Id_Inquilino INT,     -- * pode ser NULL
+    Id_Dono INT,          -- * pode ser NULL
+    Id_Apartamento INT NOT NULL,
+    Data_Recebimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Status VARCHAR(20) DEFAULT 'Recebida',
+    FOREIGN KEY (Id_Inquilino) REFERENCES Inquilino(Id_Inquilino),
+    FOREIGN KEY (Id_Dono) REFERENCES Dono(Id_Dono),
+    FOREIGN KEY (Id_Apartamento) REFERENCES Apartamento(Id_Apartamento)
+);
+
+-- Tabelas de comunicação
+CREATE TABLE Avisos (
+    Id_Avisos SERIAL PRIMARY KEY,
+    Id_Sindico INT NOT NULL,
+    Assunto VARCHAR(200) NOT NULL,
+    Texto TEXT NOT NULL,
+    Data DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (Id_Sindico) REFERENCES Sindico(Id_Sindico)
+);
+
+CREATE TABLE Enquete (
+    Id_Enquete SERIAL PRIMARY KEY,
+    Id_Sindico INT NOT NULL,
+    Assunto VARCHAR(200) NOT NULL,
+    op_1 INT DEFAULT 0,
+    op_2 INT DEFAULT 0,
+    op_3 INT DEFAULT 0,
+    op_4 INT DEFAULT 0,
+    Data DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (Id_Sindico) REFERENCES Sindico(Id_Sindico)
+);
+
+CREATE TABLE Log_Acao (
+    Id_Log SERIAL PRIMARY KEY,
+    Descricao VARCHAR(255),
+    Autor VARCHAR(100),
+    Data_Acao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
